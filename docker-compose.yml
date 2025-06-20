@@ -98,3 +98,17 @@ services:
       - ROS_DOMAIN_ID=42
     depends_on:
       - ros2-core
+  
+  rviz2:
+    build:
+      context: ./containers/rviz
+      dockerfile: Dockerfile
+    container_name: rviz2
+    environment:
+      - ROS_DOMAIN_ID=42
+      - DISPLAY=$DISPLAY
+      - QT_X11_NO_MITSHM=1
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+    depends_on:
+      - ros2-core

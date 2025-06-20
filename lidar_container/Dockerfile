@@ -23,7 +23,6 @@ RUN apt-get update && apt-get install -y \
     #ros-humble-colcon-common-extensions \
     #ros-humble-laser-proc \
     #ros-humble-diagnostic-updater \
-    && rm -rf /var/lib/apt/lists/*
     #ros-humble-laser-proc \
     #ros-humble-diagnostic-updater \
     && rm -rf /var/lib/apt/lists/*
