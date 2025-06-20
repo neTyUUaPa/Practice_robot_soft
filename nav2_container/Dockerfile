@@ -1,5 +1,5 @@
 # Базовый образ ROS 2 Humble
-FROM ros:humble
+FROM arm64v8/ros:humble
 
 # Установка зависимостей Nav2
 RUN apt update && \

@@ -1,5 +1,5 @@
 # Базовый образ с ROS 2 Humble
-FROM osrf/ros:humble-desktop
+FROM arm64v8/ros:humble
 
 # Настройка репозиториев ROS 2
 RUN apt-get update && apt-get install -y curl gnupg2 lsb-release \
