@@ -104,10 +104,12 @@ services:
       context: ./rviz2_container
       dockerfile: Dockerfile
     container_name: rviz2
+    networks:
+      - ros2-network
     environment:
-      - ROS_DOMAIN_ID=42
       - DISPLAY=$DISPLAY
       - QT_X11_NO_MITSHM=1
+      - ROS_DOMAIN_ID=42
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
     depends_on:
