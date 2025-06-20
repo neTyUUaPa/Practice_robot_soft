@@ -101,7 +101,7 @@ services:
   
   rviz2:
     build:
-      context: ./containers/rviz2_container
+      context: ./rviz2_container
       dockerfile: Dockerfile
     container_name: rviz2
     environment:
