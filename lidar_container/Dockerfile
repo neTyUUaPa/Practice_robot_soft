@@ -13,10 +13,17 @@ RUN apt-get update
 RUN apt-get update && apt-get install -y \
     python3-pip \
     python3-colcon-common-extensions \
+    libboost-all-dev \
+    libpcl-dev \
     libpcap-dev \
+    ros-humble-pcl-conversions \
+    ros-humble-pluginlib \
     ros-humble-sensor-msgs \
     ros-humble-diagnostic-updater \
     #ros-humble-colcon-common-extensions \
+    #ros-humble-laser-proc \
+    #ros-humble-diagnostic-updater \
+    && rm -rf /var/lib/apt/lists/*
     #ros-humble-laser-proc \
     #ros-humble-diagnostic-updater \
     && rm -rf /var/lib/apt/lists/*
