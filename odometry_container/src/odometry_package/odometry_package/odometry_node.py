@@ -1,8 +1,9 @@
 import rclpy
 from rclpy.node import Node
 from nav_msgs.msg import Odometry
-from geometry_msgs.msg import Quaternion, Point, Vector3, Pose, Twist
+from geometry_msgs.msg import Quaternion, Point, Vector3, Pose, Twist, TransformStamped
 from sensor_msgs.msg import Imu
+from tf2_ros import TransformBroadcaster
 from math import sin, cos
 
 class OdomFromIMU(Node):
@@ -23,6 +24,9 @@ class OdomFromIMU(Node):
 
         # Публикация в /odom
         self.odom_pub = self.create_publisher(Odometry, '/odom', 10)
+
+        # Публикация трансформации odom -> base_link
+        self.tf_broadcaster = TransformBroadcaster(self)
 
     def imu_callback(self, msg):
         # Извлечение данных из IMU
@@ -57,6 +61,24 @@ class OdomFromIMU(Node):
 
         # Публикация
         self.odom_pub.publish(odom_msg)
+
+        # Публикация трансформации odom -> base_link
+        self.broadcast_odom_transform(current_time, self.x, self.y, self.theta, msg.orientation)
+
+    def broadcast_odom_transform(self, current_time, x, y, theta, orientation):
+        t = TransformStamped()
+        t.header.stamp = current_time.to_msg()
+        t.header.frame_id = 'odom'
+        t.child_frame_id = 'base_link'
+
+        # Задаем трансформацию
+        t.transform.translation.x = x
+        t.transform.translation.y = y
+        t.transform.translation.z = 0.0
+        t.transform.rotation = orientation
+
+        # Публикуем трансформацию
+        self.tf_broadcaster.sendTransform(t)
 
 def main(args=None):
     rclpy.init(args=args)

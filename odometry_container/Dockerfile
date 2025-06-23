@@ -6,8 +6,10 @@ RUN apt-get update && apt-get install -y \
     python3-pip \
     python3-colcon-common-extensions \
     ros-humble-nav-msgs \
-    ros-humble-sensor-msgs \
     ros-humble-geometry-msgs \
+    ros-humble-tf2-ros \
+    ros-humble-tf-transformations \
+    ros-humble-sensor-msgs \
     && rm -rf /var/lib/apt/lists/*
 
 # Копирование исходного кода

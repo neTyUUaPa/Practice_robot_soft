@@ -8,7 +8,7 @@ from ament_index_python.packages import get_package_share_directory
 
 def generate_launch_description():
     # Объявление аргументов
-    use_sim_time = LaunchConfiguration('use_sim_time', default='true')
+    use_sim_time = LaunchConfiguration('use_sim_time', default='false')
     pkg_dir = get_package_share_directory('slam_package')
 
     params_file = os.path.join(pkg_dir, 'config', 'slam_params.yaml')
