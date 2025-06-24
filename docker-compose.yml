@@ -114,3 +114,15 @@ services:
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
     depends_on:
       - ros2-core
+      
+  camera-container:
+    build:
+      context: ./camera_container
+      dockerfile: Dockerfile
+    container_name: camera-container
+    devices:
+      - "/dev/video0:/dev/video0"
+    environment:
+      - ROS_MASTER_URI=http://ros2-core:11311
+    depends_on:
+      - ros2-core

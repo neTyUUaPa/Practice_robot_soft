@@ -4,5 +4,6 @@
 echo "Starting SLAM container..."
 
 # Запуск SLAM
+source /opt/ros/humble/setup.bash
 source /workspace/install/setup.bash
-exec ros2 launch slam_package slam_launch.py
+ros2 launch slam_package slam_launch.py

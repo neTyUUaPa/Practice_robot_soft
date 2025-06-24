@@ -1,4 +1,7 @@
 from setuptools import find_packages, setup
+import os
+from glob import glob
+
 
 package_name = 'slam_package'
 
@@ -10,7 +13,11 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
-        ('share/' + package_name + '/launch', ['launch/slam_launch.py']),  # Относительный путь
+        # Установка launch-файлов
+        (os.path.join('share', package_name, 'launch'), glob('slam_package/launch/*.py')),
+        
+        # Установка конфигурационных файлов
+        (os.path.join('share', package_name, 'config'), glob('slam_package/config/*.yaml')),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
