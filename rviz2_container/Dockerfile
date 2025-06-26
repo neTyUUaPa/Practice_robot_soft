@@ -12,5 +12,20 @@ RUN apt-get update && apt-get install -y \
     ros-humble-slam-toolbox \
     && rm -rf /var/lib/apt/lists/*
 
-# Команда по умолчанию: запуск RViz2
-CMD ["rviz2"]
+# Установка необходимых пакетов
+RUN apt update && apt install -y \
+    novnc \
+    websockify \
+    xvfb \
+    x11vnc \
+    && rm -rf /var/lib/apt/lists/*
+
+# Копирование скрипта запуска
+COPY start.sh /start.sh
+RUN chmod +x /start.sh
+
+# Порт NoVNC
+EXPOSE 6080
+
+# Запуск скрипта
+CMD ["/start.sh"]

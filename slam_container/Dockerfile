@@ -36,10 +36,13 @@ WORKDIR /workspace
 RUN colcon build
 
 # Установка переменных окружения
-ENV ROS_DOMAIN_ID=42
+ENV RMW_IMPLEMENTATION=rmw_fastrtps_cpp
+ENV AMENT_PREFIX_PATH=/opt/ros/humble:/workspace/install
+ENV LD_LIBRARY_PATH=/opt/ros/humble/lib:/workspace/install/lib
 
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
+
 
 # Запуск SLAM при старте контейнера
 CMD ["/entrypoint.sh"]
