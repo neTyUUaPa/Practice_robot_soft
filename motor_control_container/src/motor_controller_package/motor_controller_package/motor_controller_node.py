@@ -2,16 +2,15 @@
 
 import rclpy
 from rclpy.node import Node
-from geometry_msgs.msg import Twist
 import serial
 import struct
 
-class HoverboardCommandNode(Node):
+class HoverboardTestNode(Node):
     def __init__(self):
-        super().__init__('hoverboard_command_node')
+        super().__init__('hoverboard_test_node')
 
         # Параметры UART
-        self.serial_port = self.declare_parameter('serial_port', '/dev/serial0').value
+        self.serial_port = self.declare_parameter('serial_port', '/dev/ttyAMA0').value
         self.baud_rate = self.declare_parameter('baud_rate', 115200).value
 
         # Подключение к последовательному порту
@@ -22,13 +21,12 @@ class HoverboardCommandNode(Node):
             self.get_logger().error(f"Failed to connect to serial port: {e}")
             rclpy.shutdown()
 
-        # Подписка на топик /cmd_vel
-        self.subscription = self.create_subscription(
-            Twist,
-            '/cmd_vel',
-            self.cmd_vel_callback,
-            10
-        )
+        # Объявление параметров для steer и speed
+        self.declare_parameter('steer', 0)  # Угол поворота (по умолчанию 0)
+        self.declare_parameter('speed', 500)  # Скорость (по умолчанию 500)
+
+        # Таймер для отправки данных
+        self.timer = self.create_timer(1.0, self.timer_callback)  # Отправка каждую секунду
 
     def calculate_crc32(self, data):
         """
@@ -57,29 +55,20 @@ class HoverboardCommandNode(Node):
         self.ser.write(packet)
         self.get_logger().info(f"Sent packet: steer={steer}, speed={speed}")
 
-    def cmd_vel_callback(self, msg):
+    def timer_callback(self):
         """
-        Обработчик сообщений из топика /cmd_vel.
-        Преобразует линейную и угловую скорость в команды для моторов.
+        Отправка данных на плату.
         """
-        linear_x = msg.linear.x  # Линейная скорость (м/с)
-        angular_z = msg.angular.z  # Угловая скорость (рад/с)
-
-        # Преобразование в команды для моторов
-        max_speed = 1000  # Максимальное значение для платы (-1000 до 1000)
-        steer = int(angular_z * 100)  # Угловая скорость -> руль (-1000 до 1000)
-        speed = int(linear_x * 100)   # Линейная скорость -> скорость (-1000 до 1000)
-
-        # Ограничение значений
-        steer = max(-1000, min(1000, steer))
-        speed = max(-1000, min(1000, speed))
+        # Получение текущих значений параметров
+        test_steer = self.get_parameter('steer').value
+        test_speed = self.get_parameter('speed').value
 
         # Отправка данных
-        self.send_packet(steer, speed)
+        self.send_packet(test_steer, test_speed)
 
 def main(args=None):
     rclpy.init(args=args)
-    node = HoverboardCommandNode()
+    node = HoverboardTestNode()
     try:
         rclpy.spin(node)
     except KeyboardInterrupt:
