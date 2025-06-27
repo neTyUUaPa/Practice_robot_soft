@@ -5,6 +5,7 @@ FROM arm64v8/ros:humble
 RUN apt-get update && apt-get install -y \
     python3-pip \
     python3-colcon-common-extensions \
+    python3-smbus \
     ros-humble-tf-transformations \
     ros-humble-nav-msgs \
     ros-humble-sensor-msgs \

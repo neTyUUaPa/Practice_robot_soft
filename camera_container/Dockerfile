@@ -21,4 +21,4 @@ WORKDIR /app
 COPY Cv.py .
 
 # Команда для запуска скрипта
-CMD ["python", "Cv.py"]
+CMD ["python", "-u", "Cv.py"]
